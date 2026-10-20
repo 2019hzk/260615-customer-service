@@ -13,8 +13,8 @@ class Settings(BaseSettings):
 
     jwt_secret: str = Field("ecommerce-secret", description="jwt加密的秘钥")
     jwt_algorithm: str = Field("HS256", description="jwt加密的算法")
-    api_host: str = Field("域名", description="访域名限制")
-    api_port: int = Field("端口", description="服务端口")
+    api_host: str = Field("localhost", description="访域名限制")
+    api_port: int = Field(8001, description="服务端口")
     cors_origins: list[str] = Field(
         ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174"],
         description="限制请求域白名单")

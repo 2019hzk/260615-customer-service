@@ -6,14 +6,18 @@ ChatService组件
 from typing import Annotated
 
 from fastapi import Depends, Header
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from atguigu.app.schemas import CurrentUser
 from atguigu.app.services.auth import require_authorized_user
 from atguigu.app.services.chat import ChatService
+from atguigu.infrastructure.db import get_async_session
+
+SessionDep = Annotated[AsyncSession, Depends(get_async_session)]
 
 
-def get_chat_service():
-    return ChatService()
+def get_chat_service(session: SessionDep):
+    return ChatService(session)
 
 
 ChatServiceDep = Annotated[ChatService, Depends(get_chat_service)]
