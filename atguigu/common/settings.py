@@ -1,4 +1,4 @@
-from functools import lru_cache, cache
+from functools import lru_cache
 from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -20,6 +20,13 @@ class Settings(BaseSettings):
         description="限制请求域白名单")
     conversation_idle_timeout_minutes: int = Field(30, description="AI模式下有效的会话超时时间")
     message_merge_delay_ms: int = Field(800, description="轮次收集消息的固定时间窗口")
+    internal_service_token: str = Field("customer-internal-token", description="服务内部访问令牌")
+
+    ai_worker_poll_interval_ms: int = Field(100, description="Woker领取Turn时间")
+    ai_timeout_seconds: int = Field(30, description="请求AI Service的http超时时间")
+    ai_service_url: str = Field("http://127.0.0.1:8002", description="AI Service服务地址")
+    ai_worker_max_attempts: int = Field(3, description="当前轮次重试AI Service调用次数")
+    ai_worker_retry_delay_seconds: int = Field(2, description="重试延时")
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")
 

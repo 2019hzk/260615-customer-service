@@ -37,3 +37,15 @@ def decode_token(access_token: str) -> CurrentUser:
     user_info_dict = jwt.decode(access_token, key=get_settings().jwt_secret, algorithms=[get_settings().jwt_algorithm])
 
     return CurrentUser.model_validate(user_info_dict)
+
+
+def encode_token(user: CurrentUser) -> str:
+    """
+    职责：根据用户信息生成令牌
+    :param user:
+    :return:
+    """
+
+    token = jwt.encode(user.model_dump(), get_settings().jwt_secret, algorithm=get_settings().jwt_algorithm)
+
+    return token

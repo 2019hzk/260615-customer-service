@@ -11,4 +11,4 @@ class ChatMessageRequest(BaseModel):
 
 class CurrentUser(BaseModel):
     user_id: str
-    role: Literal["user", "staff", "admin"]
+    role: Literal["user", "staff", "admin"] = "user"
