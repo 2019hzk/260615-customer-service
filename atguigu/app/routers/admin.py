@@ -47,7 +47,7 @@ async def reply_handoff_endpoint(
         service: HandoffServiceDep,
         _: StaffDep  # 只检验
 ):
-    return await service.reply_handoff_endpoint(handoff_id, payload)
+    return await service.reply_handoff(handoff_id, payload)
 
 
 @router.post("/handoffs/{handoff_id}/resolve")

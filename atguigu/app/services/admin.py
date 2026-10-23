@@ -84,7 +84,7 @@ class HandoffService:
         # 5. 提交
         await self._session.commit()
 
-    async def reply_handoff_endpoint(self, handoff_id: str, payload: ReplyRequest):
+    async def reply_handoff(self, handoff_id: str, payload: ReplyRequest):
         """
         职责：只负责将客服回复的内容保存到事件表中
         :param handoff_id:
@@ -119,7 +119,7 @@ class HandoffService:
 
         return {
             "conversations": await self._get_count(Conversation.id),
-            "handoffs":await self._get_count(Handoff.id),
+            "handoffs": await self._get_count(Handoff.id),
             "queued": await self._get_count(Conversation.id, Conversation.mode == ConversationMode.QUEUED),
             "human": await self._get_count(Conversation.id, Conversation.mode == ConversationMode.HUMAN)
         }
