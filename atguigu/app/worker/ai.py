@@ -11,6 +11,7 @@ from typing import Any
 from atguigu.app.schemas import CurrentUser
 from atguigu.app.services.auth import encode_token
 from atguigu.app.services.chat import ChatService
+from atguigu.common.event_loop import run_async
 from atguigu.common.settings import get_settings
 from atguigu.infrastructure.db import async_session_factory
 
@@ -29,6 +30,7 @@ class AIWorker:
         启动消费者 负责一直 领取轮次，调用AI Service 清算
         :return:
         """
+        logger.info("AI Worker 已经启动")
         while True:
             claimed_turn = await self._process_next_turn()
             if claimed_turn is False:
@@ -98,3 +100,9 @@ class AIWorker:
         except Exception as exc:
             logger.exception("会话 %s 调用 AI Service 失败: %s", payload["conversation_id"], exc)
             return None, exc
+
+
+ai_woker = AIWorker()
+
+if __name__ == '__main__':
+    run_async(ai_woker.start())

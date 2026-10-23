@@ -30,3 +30,12 @@ class TurnStatus(StrEnum):
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
     SUPERSEDED = "SUPERSEDED"
+
+
+class HandoffStatus(StrEnum):
+    """
+    工单状态描述
+    """
+    WAITING = "WAITING"
+    ACTIVE = "ACTIVE"
+    RESOLVED = "RESOLVED"

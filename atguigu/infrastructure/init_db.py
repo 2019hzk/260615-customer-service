@@ -7,6 +7,7 @@ from atguigu.infrastructure.db import async_engine
 async def init_database() -> None:
     """创建当前服务 ORM 模型声明的数据库表和索引。"""
     async with async_engine.begin() as connection:
+        await connection.run_sync(Base.metadata.drop_all)
         await connection.run_sync(Base.metadata.create_all)
 
 

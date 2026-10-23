@@ -252,6 +252,8 @@ class ChatService:
 
         # d)  执行SQL语句获取当前轮次的消息
         current_messages = (await self._session.scalars(messages_stmt)).all()
+        if not current_messages:
+            return {}
 
         # 2. 构建历史消息(决策：消息的条数：30条 消息最近（最新）)
         # a) 定义构建历史消息的SQL语句
@@ -340,7 +342,7 @@ class ChatService:
         # 3.1 转人工的请求
         if run_result['reply_type'] == "REQUEST_HANDOFF":
             # a) 创建人工工单记录
-            self._handoff_service.create_handoff()
+            self._handoff_service.create_handoff(conversation, run_result['summary'])
             # b) 修改会话的模式 队列模式
             conversation.mode = ConversationMode.QUEUED
 

@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     ai_worker_max_attempts: int = Field(3, description="当前轮次重试AI Service调用次数")
     ai_worker_retry_delay_seconds: int = Field(2, description="重试延时")
 
+    redis_url: str = Field("redis://192.168.200.199:6379/0", description="Redis服务地址")
+    realtime_worker_poll_interval_seconds: float = Field(1, description="RealTime 发布实时事件时间")
+
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")
 
 

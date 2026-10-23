@@ -1,6 +1,8 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from atguigu.app.models.models import Message, Conversation, RealtimeEvent
+from atguigu.common.utils import get_utcnow
 
 """"
 异步场景(压榨CPU)：
@@ -46,3 +48,12 @@ class RealtimeService:
             self._session.add(RealtimeEvent(target=target, data=event_data))
 
         # 4. 不要提交
+
+    async def get_unpublish_event(self):
+        stmt = select(RealtimeEvent).where(RealtimeEvent.published_at.is_(None)).order_by(RealtimeEvent.id).limit(1)
+
+        return await self._session.scalar(stmt)
+
+    async def mark_published(self, event: RealtimeEvent):
+        event.published_at = get_utcnow()
+        await self._session.commit()
