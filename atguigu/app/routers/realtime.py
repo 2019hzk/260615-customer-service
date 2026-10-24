@@ -47,7 +47,7 @@ async def realtime_endpoint(websocket: WebSocket):
     # 3.用redis的pub/sub完成订阅
     async  with redis_client.pubsub() as pubsub:
         # a) 订阅路由后的通道
-        pubsub.subscribe(target)
+        await pubsub.subscribe(target)
 
         # b) 推送订阅通道成功的事件
         await websocket.send_json({"event_type": "connected"})

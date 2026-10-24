@@ -54,7 +54,7 @@ class RealtimeWorker:
 
             # 4. 发送事件
             try:
-                self._redis_client.publish(event.target, event_json)
+                await self._redis_client.publish(event.target, event_json)
             except RedisError as error:
                 logger.exception("Redis发布者出现了异常%s", str(error))
                 return False

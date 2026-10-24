@@ -311,7 +311,7 @@ class ChatService:
         :return:
         """
         conversation = await self._session.scalar(
-            select(Conversation).where(Message.conversation_id == claimed_turn.conversation_id).with_for_update())
+            select(Conversation).where(Conversation.id == claimed_turn.conversation_id).with_for_update())
 
         latest_user_message_id = await self._get_latest_user_message_id(str(conversation.id))
 
@@ -326,7 +326,8 @@ class ChatService:
             # a）继续重试
             if claimed_turn.attempts < self._settings.ai_worker_max_attempts:
                 claimed_turn.status = TurnStatus.COLLECTING
-                claimed_turn.collect_until = get_utcnow() + self._settings.ai_worker_retry_delay_seconds  # AI-Service请求时间长一些
+                claimed_turn.collect_until = get_utcnow() + timedelta(
+                    seconds=self._settings.ai_worker_retry_delay_seconds)  # AI-Service请求时间长一些
             # b) 不可以重试
             else:
                 claimed_turn.status = TurnStatus.FAILED
@@ -342,7 +343,7 @@ class ChatService:
         # 3.1 转人工的请求
         if run_result['reply_type'] == "REQUEST_HANDOFF":
             # a) 创建人工工单记录
-            self._handoff_service.create_handoff(conversation, run_result['summary'])
+            self._handoff_service.create_handoff(conversation, run_result['handoff_summary'])
             # b) 修改会话的模式 队列模式
             conversation.mode = ConversationMode.QUEUED
 

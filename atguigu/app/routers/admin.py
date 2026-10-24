@@ -6,7 +6,6 @@
 """
 
 from fastapi import APIRouter
-from watchfiles import awatch
 
 from atguigu.app.dependencies import HandoffServiceDep, StaffDep, AdminDep
 from atguigu.app.schemas import ReplyRequest

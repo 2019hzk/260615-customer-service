@@ -107,7 +107,7 @@ class HandoffService:
         handoff.status = HandoffStatus.RESOLVED
         conversation.mode = ConversationMode.AI
 
-        self._save_human_reply(conversation, f"人工客服服务接收，稍后由 AI 为你服务。")
+        self._save_human_reply(conversation, "人工客服已结束服务，稍后由 AI 为你服务。")
 
         await self._session.commit()
 
@@ -137,9 +137,9 @@ class HandoffService:
         # 1. 查询工单信息
         handoff = await self._session.scalar(select(Handoff).where(Handoff.id == handoff_id).with_for_update())
 
-        # 2. 查询会话信息 TODO ---with_for_update()
+        # 2. 查询会话信息
         conversation = await self._session.scalar(
-            select(Conversation).where(handoff.conversation_id == Conversation.id))
+            select(Conversation).where(handoff.conversation_id == Conversation.id).with_for_update())
 
         return handoff, conversation
 

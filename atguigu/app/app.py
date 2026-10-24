@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -16,15 +18,11 @@ from atguigu.app.routers import chat
 # 2. 导入第三方的
 
 # 3. 导入自己定义
-# @asynccontextmanager(可选)
 async def lifespan(_: FastAPI):
-    # 1. 应用启动完毕回调到，处理路由请求之前（资源初始化动作）
-    # await ai_woker.start()
-    # await realtime_worker.start()
-
+    # asyncio.create_task(ai_woker.start())
+    # asyncio.create_task(realtime_worker.start())
+    # await asyncio.gather(ai_woker.start(),realtime_worker.start(),return_exceptions=True)
     yield
-
-    # 2. 应用关闭之前执行（资源清理动作）
 
 
 app = FastAPI(lifespan=lifespan)
